@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const babelPlugins = require('./plugins')
-const jsonImporter =require( 'node-sass-json-importer');
+const jsonImporter = require('node-sass-json-importer')
 // const CompressionPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -14,6 +14,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 const postcssNormalize = require('postcss-normalize')
 const safePostCssParser = require('postcss-safe-parser')
 const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+
 // publicPath: "/assets/",
 
 const cssRegex = /\.css$/
@@ -30,10 +32,11 @@ module.exports = function (webpackEnv) {
   const appHtmlTemp = path.resolve(appBase, 'public/index.html')
   const isEnvProduction = webpackEnv.production
   const isEnvDevelopment = webpackEnv.development // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
+  console.log(isEnvDevelopment)
   const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile')
   const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
   const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000')
-
+  process.env.BABEL_ENV = webpackEnv.development
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
@@ -77,7 +80,7 @@ module.exports = function (webpackEnv) {
         },
         {
           loader: require.resolve(preProcessor),
-          options:  { sourceMap: true },
+          options: { sourceMap: true },
           // options: Object.assign(
           //   { sourceMap: true },
           //   preProcessor ==='sass-loader'&&{
@@ -103,7 +106,7 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.[name].js',
+        : isEnvDevelopment && 'static/js/bundle.[id].js',
       // publicPath: './',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info => path.relative(appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
@@ -228,7 +231,7 @@ module.exports = function (webpackEnv) {
             {
               test: /\.yml$/,
               use: ['file-loader?name=[name].json', 'yaml-loader'],
-              include: path.resolve(appSrc,'resources/translations'),
+              include: path.resolve(appSrc, 'resources/translations'),
             },
             {
               loader: require.resolve('file-loader'),
@@ -243,12 +246,12 @@ module.exports = function (webpackEnv) {
     },
     resolve: {
       //extensions:['.scss'],
-      alias:{
-        '~pages': './src/pages' ,
+      alias: {
+        '~pages': './src/pages',
       },
-      fallback: { 
-        "util": require.resolve("util/"),
-      },
+      // fallback: {
+      //   util: require.resolve('util/'),
+      // },
     },
     devServer: isEnvDevelopment && {
       port: 3000,
@@ -302,11 +305,13 @@ module.exports = function (webpackEnv) {
             concurrency: 100,
           },
         }),
+      isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       //  isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
       }),
+      isEnvDevelopment && new ReactRefreshWebpackPlugin({}),
     ].filter(Boolean),
   }
 }

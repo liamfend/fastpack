@@ -6,10 +6,9 @@ module.exports = {
       'module-resolver',
       {
         alias: {
-          
           '~webpack': './src/webpack',
           '~client': './src/',
-          '~pages': path.resolve(process.cwd(),'src/pages') ,
+          '~pages': path.resolve(process.cwd(), 'src/pages'),
           '~constants': './src/constants',
           '~components': './src/components',
           '~modules': './src/modules',
@@ -22,9 +21,5 @@ module.exports = {
         },
       },
     ],
-    "jsx-control-statements",
-    "@babel/plugin-syntax-dynamic-import",
-    ['@babel/plugin-proposal-decorators', { legacy: true }],
-    ['@babel/plugin-proposal-class-properties'],
   ],
 }

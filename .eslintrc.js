@@ -23,7 +23,7 @@ module.exports = {
     },
   },
   root: true,
-  plugins: ['react', 'jsx-control-statements'],
+  plugins: ['react'],
   rules: {
     'react/jsx-no-undef': [2, { allowGlobals: true }],
   },
