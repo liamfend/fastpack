@@ -62,7 +62,7 @@ server.listen(DEFAULT_PORT, 'localhost', err => {
   if (err) {
     return console.log(err)
   }
-  console.log('Starting server on http://localhost:3000')
+  console.log('Starting server on http://localhost:' + DEFAULT_PORT)
 })
 
 compiler.hooks.done.tap('done', async stats => {
