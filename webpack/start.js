@@ -8,7 +8,8 @@ const webpack = require('webpack')
 // const configFactory = require('../config/webpack.config')
 // const createDevServerConfig = require('../config/webpackDevServer.config')
 const webpackConfig = require('./webpack.config')
-const devServerConfig = require('./webpack-dev-server.config')
+const devServerConfig = require('./webpack-dev-server.config') //require('./webpack-dev-server.config')
+
 const WebpackDevServer = require('webpack-dev-server')
 const clear = require('console-clear')
 
