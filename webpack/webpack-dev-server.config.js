@@ -15,5 +15,5 @@ const initailConfig = (port, appPublic) => {
 //https://www.npmjs.com/package/portfinder
 //暂时不加动态选择端口，晚点考虑添加使用环境变量区分
 const config = initailConfig('', appPublic)
-console.log(config)
+
 module.exports = config

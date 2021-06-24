@@ -88,7 +88,7 @@ module.exports = function (webpackEnv) {
     }
     return loaders
   }
-  console.log(webpackEnv)
+
   return {
     stats: 'minimal',
     mode: webpackEnv,
