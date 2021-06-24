@@ -71,7 +71,7 @@ compiler.hooks.done.tap('done', async stats => {
 })
 ;['SIGINT', 'SIGTERM'].forEach(function (sig) {
   process.on(sig, function () {
-    devServer.close()
+    server.close()
     process.exit()
   })
 })
