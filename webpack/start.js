@@ -13,7 +13,7 @@ const devServerConfig = require('./webpack-dev-server.config') //require('./webp
 const WebpackDevServer = require('webpack-dev-server')
 const clear = require('console-clear')
 
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000
+const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3001
 //const HOST = process.env.HOST || '0.0.0.0'
 
 const configOptions = webpackConfig('development')
@@ -58,7 +58,7 @@ compiler.hooks.invalid.tap('invalid', () => {
 
 var isFirstCompiler = true
 
-server.listen(3000, 'localhost', err => {
+server.listen(DEFAULT_PORT, 'localhost', err => {
   if (err) {
     return console.log(err)
   }
