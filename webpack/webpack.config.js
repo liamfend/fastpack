@@ -1,4 +1,5 @@
 const path = require('path')
+const { appBase, appOutputBuild, appSrcJs, appSrc, appPublic, appHtmlTemp } = require('./paths')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
@@ -24,19 +25,12 @@ const sassRegex = /\.(scss|sass)$/
 const sassModuleRegex = /\.module\.(scss|sass)$/
 
 module.exports = function (webpackEnv) {
-  const appBase = process.cwd()
-  const appOutputBuild = path.resolve(appBase, 'build')
-  const appSrcJs = path.resolve(appBase, 'src/index')
-  const appSrc = path.resolve(appBase, 'src')
-  const appPublic = path.resolve(appBase, 'public')
-  const appHtmlTemp = path.resolve(appBase, 'public/index.html')
-  const isEnvProduction = webpackEnv.production
-  const isEnvDevelopment = webpackEnv.development // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
-  console.log(isEnvDevelopment)
+  const isEnvProduction = webpackEnv === 'production' //  .production
+  const isEnvDevelopment = webpackEnv === 'development' // webpackEnv  // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
   const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile')
   const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
   const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000')
-  process.env.BABEL_ENV = webpackEnv.development
+
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
@@ -94,10 +88,10 @@ module.exports = function (webpackEnv) {
     }
     return loaders
   }
-
+  console.log(webpackEnv)
   return {
     stats: 'minimal',
-    mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
+    mode: webpackEnv,
     bail: isEnvProduction,
     devtool: isEnvProduction ? 'source-map' : isEnvDevelopment && 'cheap-module-source-map',
     entry: appSrcJs,
@@ -106,7 +100,7 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.[id].js',
+        : isEnvDevelopment && 'static/js/bundle.[name].js',
       // publicPath: './',
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info => path.relative(appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
@@ -253,15 +247,6 @@ module.exports = function (webpackEnv) {
       //   util: require.resolve('util/'),
       // },
     },
-    devServer: isEnvDevelopment && {
-      port: 3000,
-      contentBase: appPublic, // boolean | string | array, static file location
-      compress: true, // enable gzip compression
-      historyApiFallback: true, // true for index.html upon 404, object for multiple paths
-      hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
-      https: false, // true for self-signed, object for cert authority
-      noInfo: true, // only errors & warns on hot reload
-    },
     plugins: [
       new WebpackBar(),
       isEnvProduction && new CleanWebpackPlugin(),
@@ -311,7 +296,7 @@ module.exports = function (webpackEnv) {
         filename: 'static/css/[name].[contenthash:8].css',
         chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
       }),
-      isEnvDevelopment && new ReactRefreshWebpackPlugin({}),
+      isEnvDevelopment && new ReactRefreshWebpackPlugin(),
     ].filter(Boolean),
   }
 }
