@@ -28,7 +28,7 @@ try {
   console.log()
   console.log(err.message || err)
   console.log()
-  process.exit(1)
+  // process.exit(1)
 }
 
 function printInstructions(appName, urls, useYarn) {
@@ -77,12 +77,13 @@ compiler.hooks.done.tap('done', async stats => {
     warnings: true,
     errors: true,
   })
+  clear()
 
   const messages = formatWebpackMessages(statsData)
-  const isSuccessful = !messages.errors.length && !messages.warnings.length
-  if (isSuccessful) {
-    console.log(chalk.green('Compiled successfully!'))
-  }
+  //   const isSuccessful = !messages.errors.length && !messages.warnings.length
+  //   //   if (isSuccessful) {
+  //   //     console.log(chalk.green('Compiled successfully!'))
+  //   //   }
   printInstructions(
     'CMS',
     {

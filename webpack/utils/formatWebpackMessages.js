@@ -15,6 +15,9 @@ function isLikelyASyntaxError(message) {
 
 // Cleans up webpack error messages.
 function formatMessage(message) {
+  console.log('===================')
+  console.log(message)
+  console.log('===================')
   let lines = message.split('\n')
 
   // Strip webpack-added headers off errors/warnings
@@ -97,8 +100,8 @@ function formatMessage(message) {
 }
 
 function formatWebpackMessages(json) {
-  const formattedErrors = json.errors.map(formatMessage)
-  const formattedWarnings = json.warnings.map(formatMessage)
+  const formattedErrors = json.errors.map(msg => formatMessage(msg.message))
+  const formattedWarnings = json.warnings.map(msg => formatMessage(msg.message))
   const result = { errors: formattedErrors, warnings: formattedWarnings }
   if (result.errors.some(isLikelyASyntaxError)) {
     // If there are any syntax errors, show just them.
