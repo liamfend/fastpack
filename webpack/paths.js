@@ -23,7 +23,6 @@ const appPublic = path.resolve(appBase, 'public')
 const appHtmlTemp = path.resolve(appBase, 'public/index.html')
 const envFile = path.resolve(appBase, '.env')
 const appPublicPath = ''
-
 module.exports = {
   appBase,
   appOutputBuild,
