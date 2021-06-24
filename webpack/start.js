@@ -1,13 +1,15 @@
 //再怎么敲命令都不允许覆盖😈
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
+
 require('./env')
 const webpack = require('webpack')
 // const WebpackDevServer = require('webpack-dev-server')
 // const configFactory = require('../config/webpack.config')
 // const createDevServerConfig = require('../config/webpackDevServer.config')
 const webpackConfig = require('./webpack.config')
-const devServerConfig = require('./webpack-dev-server.config')
+const devServerConfig = require('./webpack-dev-server.config') //require('./webpack-dev-server.config')
+
 const WebpackDevServer = require('webpack-dev-server')
 const clear = require('console-clear')
 
@@ -64,7 +66,7 @@ server.listen(3000, 'localhost', err => {
 })
 
 compiler.hooks.done.tap('done', async stats => {
-  // console.log(JSON.stringify(process.env))
+  console.log(JSON.stringify(process.env))
   console.log('over')
 })
 ;['SIGINT', 'SIGTERM'].forEach(function (sig) {
