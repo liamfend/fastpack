@@ -88,11 +88,9 @@ module.exports = function (webpackEnv) {
     }
     return loaders
   }
-  console.log('----')
   console.log(webpackEnv)
-  console.log('----')
   return {
-    //stats: 'minimal',
+    stats: 'minimal',
     mode: webpackEnv,
     bail: isEnvProduction,
     devtool: isEnvProduction ? 'source-map' : isEnvDevelopment && 'cheap-module-source-map',
@@ -177,7 +175,7 @@ module.exports = function (webpackEnv) {
               loader: require.resolve('babel-loader'),
               options: {
                 presets: ['@babel/preset-env', '@babel/preset-react'],
-                plugins: [...babelPlugins.plugins, 'react-refresh/babel'],
+                plugins: [...babelPlugins.plugins],
               },
             },
             {
@@ -250,6 +248,7 @@ module.exports = function (webpackEnv) {
       // },
     },
     plugins: [
+      new WebpackBar(),
       isEnvProduction && new CleanWebpackPlugin(),
       new HtmlWebpackPlugin(
         Object.assign(
