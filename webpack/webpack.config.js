@@ -15,6 +15,7 @@ const postcssNormalize = require('postcss-normalize')
 const safePostCssParser = require('postcss-safe-parser')
 const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const { appBase, appOutputBuild, appSrcJs, appSrc, appPublic, appHtmlTemp } = require('./paths')
 
 // publicPath: "/assets/",
 
@@ -24,19 +25,13 @@ const sassRegex = /\.(scss|sass)$/
 const sassModuleRegex = /\.module\.(scss|sass)$/
 
 module.exports = function (webpackEnv) {
-  const appBase = process.cwd()
-  const appOutputBuild = path.resolve(appBase, 'build')
-  const appSrcJs = path.resolve(appBase, 'src/index')
-  const appSrc = path.resolve(appBase, 'src')
-  const appPublic = path.resolve(appBase, 'public')
-  const appHtmlTemp = path.resolve(appBase, 'public/index.html')
-  const isEnvProduction = webpackEnv.production
-  const isEnvDevelopment = webpackEnv.development // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
-  console.log(isEnvDevelopment)
+  const isEnvProduction = false //webpackEnv.production
+  const isEnvDevelopment = true //webpackEnv.development // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
+
   const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile')
   const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
   const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000')
-  process.env.BABEL_ENV = webpackEnv.development
+
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
