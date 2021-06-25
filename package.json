@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config ./webpack/webpack.config.js --env production",
+    "build1": "webpack --config ./webpack/webpack.config.js --env production",
     "start1": "webpack serve --config ./webpack/webpack.config.js --env development",
     "start": "node ./webpack/start.js",
+    "build": "node ./webpack/build.js",
     "lint:js": "eslint ./src --fix",
     "lint:css": "stylelint ./src/**/*.scss --fix",
     "lint": "yarn lint:js && yarn lint:css",
