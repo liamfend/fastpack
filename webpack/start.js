@@ -2,9 +2,7 @@
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
-console.log('----1---')
 require('./env')
-console.log('----1---')
 const webpack = require('webpack')
 const webpackConfig = require('./webpack.config')
 const devServerConfig = require('./webpack-dev-server.config')
@@ -86,8 +84,8 @@ compiler.hooks.done.tap('done', async stats => {
   printInstructions(
     'CMS',
     {
-      lanUrlForTerminal: `http://localhost:${DEFAULT_PORT}`,
-      localUrlForTerminal: `http://localhost:${DEFAULT_PORT}`,
+      lanUrlForTerminal: `http://localhost:${DEFAULT_PORT}${process.env.PUBLIC_URL}`,
+      localUrlForTerminal: `http://localhost:${DEFAULT_PORT}${process.env.PUBLIC_URL}`,
     },
     true,
   )

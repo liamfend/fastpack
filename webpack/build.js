@@ -7,12 +7,14 @@ process.on('unhandledRejection', err => {
 })
 require('./env')
 const chalk = require('chalk')
-const path = require('path')
+//const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
 const configFactory = require('./webpack.config')
 const paths = require('./paths')
 const formatWebpackMessages = require('./utils/formatWebpackMessages')
+const printBuildError = require('./utils/printBuildError')
+const FileSizeReporter = require('./utils/FileSizeReporter')
 
 //const useYarn = fs.existsSync(path.resolve(paths.appBase, 'yarn.lock'))
 
@@ -24,8 +26,9 @@ const isInteractive = process.stdout.isTTY
 
 const argv = process.argv.slice(2)
 const writeStatsJson = argv.indexOf('--stats') !== -1
+const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
+const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild
 
-// Generate configuration
 const config = configFactory('production')
 
 function build(previousFileSizes) {
@@ -84,7 +87,7 @@ function build(previousFileSizes) {
 
       if (writeStatsJson) {
         return bfj
-          .write(paths.appBuild + '/bundle-stats.json', stats.toJson())
+          .write(paths.appOutputBuild + '/bundle-stats.json', stats.toJson())
           .then(() => resolve(resolveArgs))
           .catch(error => reject(new Error(error)))
       }
@@ -93,12 +96,56 @@ function build(previousFileSizes) {
     })
   })
 }
+console.log(paths.appOutputBuild)
+measureFileSizesBeforeBuild(paths.appOutputBuild)
+  .then(previousFileSizes => build(previousFileSizes))
+  .then(
+    ({ stats, previousFileSizes, warnings }) => {
+      if (warnings.length) {
+        console.log(chalk.yellow('Compiled with warnings.\n'))
+        console.log(warnings.join('\n\n'))
+        console.log(
+          '\nSearch for the ' +
+            chalk.underline(chalk.yellow('keywords')) +
+            ' to learn more about each warning.',
+        )
+        console.log(
+          'To ignore, add ' + chalk.cyan('// eslint-disable-next-line') + ' to the line before.\n',
+        )
+      } else {
+        console.log(chalk.green('Compiled successfully.\n'))
+      }
 
-try {
-  build(10000)
-} catch (err) {
-  if (err && err.message) {
-    console.log(err.message)
-  }
-  process.exit(1)
-}
+      console.log('File sizes after gzip:\n')
+      printFileSizesAfterBuild(
+        stats,
+        previousFileSizes,
+        paths.appOutputBuild,
+        WARN_AFTER_BUNDLE_GZIP_SIZE,
+        WARN_AFTER_CHUNK_GZIP_SIZE,
+      )
+      console.log()
+    },
+    err => {
+      const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true'
+      if (tscCompileOnError) {
+        console.log(
+          chalk.yellow(
+            'Compiled with the following type errors (you may want to check these before deploying your app):\n',
+          ),
+        )
+        printBuildError(err)
+      } else {
+        console.log(chalk.red('Failed to compile.\n'))
+        printBuildError(err)
+        process.exit(1)
+      }
+    },
+  )
+  .catch(err => {
+    console.log(err)
+    if (err && err.message) {
+      console.log(err.message)
+    }
+    process.exit(1)
+  })

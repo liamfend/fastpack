@@ -251,7 +251,7 @@ module.exports = function (webpackEnv) {
       // },
     },
     plugins: [
-      new WebpackBar(),
+      isEnvDevelopment && new WebpackBar(),
       isEnvProduction && new CleanWebpackPlugin(),
       new HtmlWebpackPlugin(
         Object.assign(

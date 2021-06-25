@@ -30,10 +30,6 @@ dotenvFiles.forEach(dotenvFile => {
   }
 })
 
-console.log(envConfigs)
-
-console.log(process.env)
-debugger
 const envRaw = Object.keys(envConfigs).reduce(
   (env, key) => {
     env[key] = process.env[key]
@@ -47,15 +43,3 @@ const envRaw = Object.keys(envConfigs).reduce(
 )
 
 module.exports = envRaw
-
-// const getRawEnv = ()=>{
-//   raw:
-// }
-
-// module.exports =
-//console.log(JSON.stringify(process.env))
-// envVariables =
-// .config({ path: '/custom/path/to/.env' })
-// const result = dotenv.config()
-
-// require('dotenv').config({ path: '/custom/path/to/.env' })

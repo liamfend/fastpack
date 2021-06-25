@@ -1,4 +1,4 @@
-const { appPublic } = require('./paths')
+const { appPublic, appPublicPathUrl } = require('./paths')
 
 const initailConfig = (port, appPublic) => {
   return {
@@ -9,6 +9,9 @@ const initailConfig = (port, appPublic) => {
     hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
     https: false, // true for self-signed, object for cert authority
     noInfo: true, // only errors & warns on hot reload
+    publicPath: appPublicPathUrl.slice(0, -1),
+    contentBasePublicPath: appPublicPathUrl,
+    quiet: true,
   }
 }
 //https://www.npmjs.com/package/get-port
