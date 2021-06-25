@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const appBase = require('./basepath')
 
 const moduleFileExtensions = ['js', 'jsx', 'ts', 'tsx', 'json'] //留着以后做成通用库后，支持 配置 和 ts
 
@@ -15,21 +16,19 @@ const resolveModule = filePath => {
   return path.resolve(`${filePath}.js`)
 }
 
-const appBase = fs.realpathSync(process.cwd())
 const appOutputBuild = path.resolve(appBase, 'build')
 const appSrcJs = resolveModule(path.resolve(appBase, 'src/index'))
 const appSrc = path.resolve(appBase, 'src')
 const appPublic = path.resolve(appBase, 'public')
 const appHtmlTemp = path.resolve(appBase, 'public/index.html')
-const envFile = path.resolve(appBase, '.env')
-const appPublicPath = ''
+const appPublicPathUrl = process.env.PUBLIC_URL || './'
+
 module.exports = {
   appBase,
   appOutputBuild,
   appSrcJs,
   appSrc,
   appPublic,
-  envFile,
   appHtmlTemp,
-  appPublicPath,
+  appPublicPathUrl,
 }

@@ -1,23 +1,26 @@
 const path = require('path')
-const { appBase, appOutputBuild, appSrcJs, appSrc, appPublic, appHtmlTemp } = require('./paths')
+const {
+  appBase,
+  appOutputBuild,
+  appSrcJs,
+  appSrc,
+  appPublic,
+  appHtmlTemp,
+  appPublicPathUrl,
+} = require('./paths')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const babelPlugins = require('./plugins')
-const jsonImporter = require('node-sass-json-importer')
-// const CompressionPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const postcssNormalize = require('postcss-normalize')
 const safePostCssParser = require('postcss-safe-parser')
-const getCSSModuleLocalIdent = require('./getCSSModuleLocalIdent')
+const getCSSModuleLocalIdent = require('./utils/getCSSModuleLocalIdent')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-
-// publicPath: "/assets/",
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
@@ -101,7 +104,7 @@ module.exports = function (webpackEnv) {
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
         : isEnvDevelopment && 'static/js/bundle.[name].js',
-      // publicPath: './',
+      publicPath: appPublicPathUrl,
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info => path.relative(appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
         : isEnvDevelopment && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),

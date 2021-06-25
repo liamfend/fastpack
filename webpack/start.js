@@ -2,13 +2,12 @@
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
+console.log('----1---')
 require('./env')
+console.log('----1---')
 const webpack = require('webpack')
-// const WebpackDevServer = require('webpack-dev-server')
-// const configFactory = require('../config/webpack.config')
-// const createDevServerConfig = require('../config/webpackDevServer.config')
 const webpackConfig = require('./webpack.config')
-const devServerConfig = require('./webpack-dev-server.config') //require('./webpack-dev-server.config')
+const devServerConfig = require('./webpack-dev-server.config')
 const formatWebpackMessages = require('./utils/formatWebpackMessages')
 const WebpackDevServer = require('webpack-dev-server')
 const chalk = require('chalk')
