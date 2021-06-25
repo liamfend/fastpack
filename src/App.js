@@ -7,38 +7,11 @@ function App(props) {
   }, [])
   return (
     <div>
-      3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-      sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-      {props.test}{' '}
       <div>
         3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
         sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
-      </div>
-      <div>
-        3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-        sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
-      </div>
-      <div>
-        3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-        sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
-      </div>
-      <div>
-        3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-        sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
-      </div>
-      <div>
-        3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-        sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
-      </div>
-      <div>
-        3332222 222<h1> dssdafdsafafsa dsafdsaf fdsafdsaf sdfadsafsa </h1>safds adaf afdas test
-        sdafdsa aaaa dsaffdsaf sdafdafdafsdsaf dsa dsafdasf dsaffa dasfdsa
-        {props.test}
+        {props.test} sdfsasaf
+        {JSON.stringify(process.env)}
       </div>
     </div>
   )

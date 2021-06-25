@@ -13,6 +13,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const babelPlugins = require('./plugins')
+const { env } = require('./env')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
@@ -294,6 +295,7 @@ module.exports = function (webpackEnv) {
           },
         }),
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
+      new webpack.DefinePlugin(env.stringified),
       //  isEnvProduction &&
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash:8].css',

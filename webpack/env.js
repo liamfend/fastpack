@@ -30,7 +30,7 @@ dotenvFiles.forEach(dotenvFile => {
   }
 })
 
-const envRaw = Object.keys(envConfigs).reduce(
+const raw = Object.keys(envConfigs).reduce(
   (env, key) => {
     env[key] = process.env[key]
     return env
@@ -42,4 +42,11 @@ const envRaw = Object.keys(envConfigs).reduce(
   },
 )
 
-module.exports = envRaw
+const stringified = {
+  'process.env': Object.keys(raw).reduce((env, key) => {
+    env[key] = JSON.stringify(raw[key])
+    return env
+  }, {}),
+}
+
+module.exports = { env: { stringified, raw } }
