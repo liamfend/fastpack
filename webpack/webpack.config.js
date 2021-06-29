@@ -20,8 +20,10 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const postcssNormalize = require('postcss-normalize')
 const safePostCssParser = require('postcss-safe-parser')
+const oslConfig = require('./utils/mergeOslConfig')
 const getCSSModuleLocalIdent = require('./utils/getCSSModuleLocalIdent')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
@@ -33,6 +35,7 @@ module.exports = function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development' // webpackEnv  // 还有本地 ci 线上ci 等等。。 所以不可以用！isEnvProduction
   const isEnvProductionProfile = isEnvProduction && process.argv.includes('--profile')
   const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
+  const isAnalyze = process.env.ANALYZE
   const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000')
 
   const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -100,7 +103,7 @@ module.exports = function (webpackEnv) {
     devtool: isEnvProduction ? 'source-map' : isEnvDevelopment && 'cheap-module-source-map',
     entry: appSrcJs,
     output: {
-      path: isEnvProduction ? appOutputBuild : undefined,
+      path: isEnvProduction ? appOutputBuild : appOutputBuild,
       pathinfo: isEnvDevelopment,
       filename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].js'
@@ -178,8 +181,7 @@ module.exports = function (webpackEnv) {
               exclude: /(node_modules)/,
               loader: require.resolve('babel-loader'),
               options: {
-                presets: ['@babel/preset-env', '@babel/preset-react'],
-                plugins: [...babelPlugins.plugins],
+                ...oslConfig.babel,
               },
             },
             {
@@ -243,13 +245,11 @@ module.exports = function (webpackEnv) {
       ],
     },
     resolve: {
-      //extensions:['.scss'],
-      alias: {
-        '~pages': './src/pages',
-      },
-      // fallback: {
-      //   util: require.resolve('util/'),
-      // },
+      ...oslConfig.resolve,
+      alias: Object.keys(oslConfig.resolve.alias).reduce((a, k) => {
+        a[k] = path.resolve(appBase, oslConfig.resolve.alias[k])
+        return a
+      }, {}),
     },
     plugins: [
       isEnvDevelopment && new WebpackBar(),
@@ -302,6 +302,10 @@ module.exports = function (webpackEnv) {
         chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
       }),
       isEnvDevelopment && new ReactRefreshWebpackPlugin(),
+      isAnalyze && new BundleAnalyzerPlugin(),
+      ...(Array.isArray(oslConfig.webpackPlugins)
+        ? oslConfig.webpackPlugins
+        : oslConfig.webpackPlugins(webpackEnv)),
     ].filter(Boolean),
   }
 }

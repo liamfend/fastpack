@@ -1,8 +1,15 @@
 {
-  "name": "newpack",
+  "name": "@liamfend/fast-pack",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./webpack/bin/osl-script.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "webpack/*"
+  ],
+  "repository": "git@github.com:liamfend/fastpack.git",
   "scripts": {
     "build1": "webpack --config ./webpack/webpack.config.js --env production",
     "start1": "webpack serve --config ./webpack/webpack.config.js --env development",
@@ -79,6 +86,7 @@
     "*.scss": "stylelint ./src/**/*.scss --fix"
   },
   "dependencies": {
+    "@liamfend/fast-pack": "^1.0.0",
     "axios": "^0.21.1",
     "console-clear": "^1.1.1",
     "filesize": "^6.3.0",
@@ -90,7 +98,8 @@
     "react-dom": "^17.0.2",
     "react-i18next": "^11.10.0",
     "recursive-readdir": "^2.2.2",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^6.0.0",
+    "webpack-bundle-analyzer": "^4.4.2"
   },
   "test": {}
 }
